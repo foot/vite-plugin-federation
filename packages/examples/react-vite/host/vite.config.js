@@ -9,7 +9,9 @@ export default defineConfig({
     federation({
       name: 'app',
       remotes: {
-        remoteApp: 'http://localhost:5001/assets/remoteEntry.js',
+        // FIXME: need a dummy import here or we get a:
+        // "ReferenceError: __rf_placeholder__shareScope is not defined"
+        dummyApp: 'dummy.js',
       },
       shared: ['react','react-dom']
     })

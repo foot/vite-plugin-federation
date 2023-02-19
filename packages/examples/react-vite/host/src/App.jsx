@@ -1,8 +1,23 @@
+import React, { Suspense } from 'react'
+// FIXME: if you use an import() somewhere in this file
+// it will trigger an auto-injection of this import too
+// which will raise an error
+import {
+  __federation_method_setRemote,
+  __federation_method_getRemote
+} from '__federation__'
 import reactLogo from './assets/react.svg'
 import './App.css'
-import Button from 'remoteApp/Button';
 
 function App() {
+  const RemoteButton = React.lazy(() => {
+    __federation_method_setRemote('myRemote', {
+      url: 'http://localhost:3001/assets/remoteEntry.js',
+      format: 'esm'
+    })
+    return __federation_method_getRemote('myRemote', './Button')
+  })
+
   return (
     <div className="App">
       <div>
@@ -15,7 +30,9 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <Button />
+        <Suspense>
+          <RemoteButton />
+        </Suspense>
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
